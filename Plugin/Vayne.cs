@@ -39,6 +39,8 @@ namespace MAC.Plugin
 
             Game.OnGameUpdate += GameOnOnGameUpdate;
             Drawing.OnDraw += DrawingOnOnDraw;
+            Interrupter.OnPossibleToInterrupt += InterrupterOnOnPossibleToInterrupt;
+            AntiGapcloser.OnEnemyGapcloser += AntiGapcloserOnOnEnemyGapcloser;
 
             MiscControl.PrintChat(MiscControl.stringColor("Vayne Loaded", MiscControl.TableColor.Red));
         }
@@ -508,6 +510,23 @@ namespace MAC.Plugin
                             fountainRange);
         }
 
+        private void InterrupterOnOnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        {
+            if (!GetBool("interromperE") || spell.DangerLevel != InterruptableDangerLevel.High || unit.Distance(ObjectManager.Player.Position) < R.Range)
+                return;
+
+            R.Cast(Packets);
+        }
+
+        private void AntiGapcloserOnOnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (!GetBool("gapcloser"))
+                return;
+
+            if (E.IsReady() && GetBool("gapcloserE"))
+                E.Cast(Game.CursorPos);
+        }
+
         public override void Combo(Menu config)
         {
             config.AddItem(new MenuItem("comboQ", "Use Q").SetValue(true));
@@ -531,6 +550,9 @@ namespace MAC.Plugin
             config.AddItem(new MenuItem("comboType", "Combo Type").SetValue(new StringList(new[] { "Normal", "Advanced", "Gosu" }, 2)));
             config.AddItem(new MenuItem("condemnNextAuto", "Condemn on next Auto Attack").SetValue(false));
             config.AddItem(new MenuItem("minEnemiesInRangeR", "Min. enemies in range to cast Ultimate").SetValue(new Slider(2, 1, 5)));
+            config.AddItem(new MenuItem("interruptE", "Use E to interrupt").SetValue(true));
+            config.AddItem(new MenuItem("gapcloser", "Anti Gap Closer").SetValue(true));
+            config.AddItem(new MenuItem("gapcloserE", "Anti Gap Closer with E").SetValue(true));
         }
 
         public override void Extra(Menu config)
