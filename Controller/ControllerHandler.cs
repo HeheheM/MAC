@@ -17,6 +17,7 @@ namespace MAC.Controller
         {
             Events.Game.OnGameStart += OnGameStart;
             Game.PrintChat(MiscControl.stringColor("MAC , " + GameControl.version, MiscControl.TableColor.Gold));
+            Game.PrintChat("Para mais assemblies como esse acesse www.lol-pro.net");
         }
 
         /*
