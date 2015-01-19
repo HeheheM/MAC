@@ -131,7 +131,7 @@ namespace MAC.Plugin
 
                 if (stackCount == 2 && !lastObjectAttacked.IsDead && lastObjectAttacked.Type == GameObjectType.obj_AI_Hero)
                 {
-                    if (E.IsReady() && calcularDanoAtaque(target, false) > target.Health && E.InRange(target.Position))
+                    if (E.IsReady() && calcularDanoAtaque(target, false) > target.Health && E.IsInRange(target.Position))
                     {
                         E.Cast(target);
                     }
@@ -147,7 +147,7 @@ namespace MAC.Plugin
                     !lastObjectAttacked.IsDead &&
                     lastObjectAttacked.Type == GameObjectType.obj_AI_Hero && 
                     target == lastObjectAttacked && 
-                    Q.InRange(target.Position))
+                    Q.IsInRange(target.Position))
                 {
                     Q.Cast(target);
                 }
@@ -198,7 +198,7 @@ namespace MAC.Plugin
 
                 if (stackCount == 2 && !lastObjectAttacked.IsDead && lastObjectAttacked.Type == GameObjectType.obj_AI_Hero)
                 {
-                    if (E.IsReady() && calcularDanoAtaque(target, false) > target.Health && E.InRange(target.Position) && GetBool("comboE"))
+                    if (E.IsReady() && calcularDanoAtaque(target, false) > target.Health && E.IsInRange(target.Position) && GetBool("comboE"))
                     {
                         E.Cast(target);
                     }
@@ -214,7 +214,7 @@ namespace MAC.Plugin
                     !lastObjectAttacked.IsDead &&
                     lastObjectAttacked.Type == GameObjectType.obj_AI_Hero &&
                     target == lastObjectAttacked &&
-                    Q.InRange(target.Position) && GetBool("comboQ"))
+                    Q.IsInRange(target.Position) && GetBool("comboQ"))
                 {
                     Q.Cast(target);
                 }
@@ -417,51 +417,24 @@ namespace MAC.Plugin
             return false;
         }
 
+        /*
+         Cleaner code Asuna
+         */
         public Vector3 getCondemnPosition(Obj_AI_Hero target)
         {
             if(CondemnCheck(Player.Position, out target))
                 return Vector3.Zero;
 
-            //Checa a direção
-            var direction = (Player.ServerPosition - target.Position).Normalized();
-            var maxAngle = 180f;
-            var step = maxAngle / 6f;
-            var currentAngle = 0f;
-            var currentStep = 0f;
-
-            var fromPosition = Player.Position;
-            var toPosition = Vector3.Zero;
-
-            while(currentStep < maxAngle && currentAngle > 0)
+            for (int I = 0; I <= 360; I += 65)
             {
-                // Checa proximo angulo
-                if ((currentAngle == 0 || currentAngle < 0) && currentStep != 0)
+                var F1 = new Vector2(Player.Position.X + (float)(300 * Math.Cos(I * (Math.PI / 180))), Player.Position.Y + (float)(300 * Math.Sin(I * (Math.PI / 180)))).To3D();
+                Obj_AI_Hero targ;
+                if (CondemnCheck(F1, out targ))
                 {
-                    currentAngle = (currentStep) * (float)Math.PI / 180;
-                    currentStep += step;
+                    return F1;
                 }
-                else if (currentAngle > 0)
-                    currentAngle = -currentAngle;
-
-                Vector3 checkPoint;
-
-                // Checa uma vez antes de fazer a rotação de angulo
-                if (currentStep == 0)
-                {
-                    currentStep = step;
-                    checkPoint = target.Position + 470 * direction;
-                }
-                else
-                    checkPoint = target.Position + 470 * direction.Rotated(currentAngle);
-
-                if (target.Position.GetFirstWallPoint(checkPoint).HasValue)
-                {
-                    toPosition = Player.Position + 470 * (checkPoint - target.Position).Normalized();
-                }
-
             }
-
-            return V2E(toPosition, target.Position, target.Distance(toPosition) + 250).To3D();
+            return Vector3.Zero;
         }
 
         static Vector2 V2E(Vector3 from, Vector3 direction, float distance)
