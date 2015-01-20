@@ -117,9 +117,19 @@ namespace MAC.Plugin
                     R.Cast(target);
                 }
 
-                if (E.IsReady() && !GetBool("dontETurr") && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range )
+                if (E.IsReady() && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range )
                 {
-                    E.Cast(Game.CursorPos);
+                    if(isUnderEnemyTurret(target.Position) && !GetBool("dontETurr"))
+                    {
+                        E.Cast(Game.CursorPos);       
+                    }
+                    else if (isUnderEnemyTurret(target.Position) && GetBool("dontETurr"))
+                    {
+                        
+                    }else
+                    {
+                        E.Cast(Game.CursorPos);       
+                    }
                 }
 
                 if (CanUseItem(3142) && Player.Distance(target.Position) < Player.AttackRange)
@@ -155,9 +165,19 @@ namespace MAC.Plugin
                     R.Cast(target);
                 }
 
-                if (E.IsReady() && !GetBool("dontETurr") && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range && GetBool("comboE"))
+                if (E.IsReady() && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range && GetBool("comboE"))
                 {
-                    E.Cast(Game.CursorPos);
+                    if(isUnderEnemyTurret(target.Position) && !GetBool("dontETurr"))
+                    {
+                        E.Cast(Game.CursorPos);       
+                    }
+                    else if (isUnderEnemyTurret(target.Position) && GetBool("dontETurr"))
+                    {
+                        
+                    }else
+                    {
+                        E.Cast(Game.CursorPos);       
+                    }
                 }
 
                 if (CanUseItem(3142) && Player.Distance(target.Position) < Player.AttackRange && GetBool("YoumuuC"))
@@ -199,9 +219,19 @@ namespace MAC.Plugin
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Physical);
 
-            if (E.IsReady() && GetBool("harassE") && manaManager() && !GetBool("dontETurr") && Player.Distance(target.Position) > Player.AttackRange )
+            if (E.IsReady() && GetBool("harassE") && manaManager() && Player.Distance(target.Position) > Player.AttackRange )
             {
-                E.Cast(Game.CursorPos);
+                if(isUnderEnemyTurret(target.Position) && !GetBool("dontETurr"))
+                    {
+                        E.Cast(Game.CursorPos);       
+                    }
+                    else if (isUnderEnemyTurret(target.Position) && GetBool("dontETurr"))
+                    {
+                        
+                    }else
+                    {
+                        E.Cast(Game.CursorPos);       
+                    }
             }
 
         }
