@@ -117,7 +117,7 @@ namespace MAC.Plugin
                     R.Cast(target);
                 }
 
-                if (E.IsReady() && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range )
+                if (E.IsReady() && !GetBool("dontETurr") && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range )
                 {
                     E.Cast(Game.CursorPos);
                 }
@@ -155,7 +155,7 @@ namespace MAC.Plugin
                     R.Cast(target);
                 }
 
-                if (E.IsReady() && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range && GetBool("comboE"))
+                if (E.IsReady() && !GetBool("dontETurr") && Player.Distance(target.Position) > Player.AttackRange && Player.Distance(target.Position) < Player.AttackRange + E.Range && GetBool("comboE"))
                 {
                     E.Cast(Game.CursorPos);
                 }
@@ -199,7 +199,7 @@ namespace MAC.Plugin
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Physical);
 
-            if (E.IsReady() && GetBool("harassE") && manaManager() && Player.Distance(target.Position) > Player.AttackRange )
+            if (E.IsReady() && GetBool("harassE") && manaManager() && !GetBool("dontETurr") && Player.Distance(target.Position) > Player.AttackRange )
             {
                 E.Cast(Game.CursorPos);
             }
@@ -298,6 +298,15 @@ namespace MAC.Plugin
 
             return (float)damage;
         }
+        
+        bool isUnderEnemyTurret(Vector3 Position)
+        {
+            foreach (var tur in ObjectManager.Get<Obj_AI_Turret>().Where(turr => turr.IsEnemy && (turr.Health != 0)))
+            {
+                if (tur.Distance(Position) <= 975f) return true;
+            }
+            return false;
+        }
 
 
         public override void Combo(Menu config)
@@ -323,7 +332,7 @@ namespace MAC.Plugin
         public override void Misc(Menu config)
         {
             config.AddItem(new MenuItem("comboType", "Combo Type").SetValue(new StringList(new[] { "Normal", "Advanced", "Gosu" }, 2)));
-            config.AddItem(new MenuItem("minEnemiesInRangeR", "Min. enemies in range to cast Ultimate").SetValue(new Slider(2, 1, 5)));
+            config.AddItem(new MenuItem("dontETurr", "Don't Use E under Enemy Tower").SetValue(true));
         }
 
         public override void Extra(Menu config)
@@ -334,12 +343,6 @@ namespace MAC.Plugin
             }
 
             config.AddSubMenu(MiscMSubMenu);
-
-            var MiscCSubMenu = new Menu("Misc - Condemn", "MiscC");
-            {
-            }
-
-            config.AddSubMenu(MiscCSubMenu);
 
         }
 
