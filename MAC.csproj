@@ -65,6 +65,7 @@
     <Compile Include="Controller\PotionHandler.cs" />
     <Compile Include="Model\PluginModel.cs" />
     <Compile Include="Model\Utilitario.cs" />
+    <Compile Include="Plugin\Graves.cs" />
     <Compile Include="Plugin\Vayne.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
