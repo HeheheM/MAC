@@ -287,7 +287,7 @@ namespace MAC.Plugin
         {
             var mana = GetValue<Slider>("saveMana").Value;
 
-            if (Player.ManaPercentage() <= mana)
+            if (Player.Mana >= Player.MaxMana * (mana/100))
             {
                 return true;
             }
