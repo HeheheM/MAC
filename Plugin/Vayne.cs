@@ -25,6 +25,7 @@ namespace MAC.Plugin
         //Bonus de dano no 3 ataque
         public int[] danoVerdadeiro = { 20, 30, 40, 50, 60 };
         public int[] bonusPorcentagemHP = { 4, 5, 6, 7, 8 };
+        public int comboTypeIndex = 2;
 
         public Vayne()
         {
@@ -49,7 +50,6 @@ namespace MAC.Plugin
         {
             var drawQ = GetBool("drawQ");
             var drawE = GetBool("drawE");
-            var comboTypeIndex = Menu.Item("comboType").GetValue<StringList>().SelectedIndex;
 
             var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
@@ -83,13 +83,15 @@ namespace MAC.Plugin
             if (GetBool("drawCondemnPosition"))
             {
                 var position = getCondemnPosition(target);
-                Utility.DrawCircle(position, 80, System.Drawing.Color.White);
+                Render.Circle.DrawCircle(position, 80, System.Drawing.Color.White);
             }
 
         }
 
         private void GameOnOnGameUpdate(EventArgs args)
         {
+            comboTypeIndex =  Menu.Item("comboType").GetValue<StringList>().SelectedIndex;
+
             switch (OrbwalkerMode)
             {
                 case Orbwalking.OrbwalkingMode.Mixed:
@@ -106,8 +108,9 @@ namespace MAC.Plugin
         {
             var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
-            var comboTypeIndex = Menu.Item("comboType").GetValue<StringList>().SelectedIndex;
-            
+            if (target == null)
+                return;
+
             /*
                 Gosu mode ignore all your combo configs 
              */
@@ -450,7 +453,7 @@ namespace MAC.Plugin
 
         bool isUnderTurret(Vector3 Position)
         {
-            foreach (var tur in ObjectManager.Get<Obj_AI_Turret>().Where(turr => turr.Health != 0))
+            foreach (var tur in ObjectManager.Get<Obj_AI_Turret>().Where(turr => turr.IsAlly && (turr.Health != 0)))
             {
                 if (tur.Distance(Position) <= 975f) return true;
             }
