@@ -1,4 +1,4 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
 using MAC.Model;
 using MAC.Util;
@@ -22,7 +22,7 @@ namespace MAC.Plugin
         public Graves()
         {
             Q = new Spell(SpellSlot.Q, 950f);
-            Q.SetSkillshot(0.25f, 10f * 2 * (float)Math.PI / 180, 1950, false, SkillshotType.SkillshotCone);
+            Q.SetSkillshot(0.25f, 10f * 1.9f * (float)Math.PI / 180, 1950, false, SkillshotType.SkillshotCone);
 
             W = new Spell(SpellSlot.W, 950);
             W.SetSkillshot(0.25f, 250f, 1650f, false, SkillshotType.SkillshotCircle);
@@ -256,18 +256,18 @@ namespace MAC.Plugin
             {
                 if (comboTypeIndex == 2 && Q.IsReady() && Q.IsInRange(target))
                 {
-                    Q.Cast(target.Position);
+                    Q.CastIfHitchanceEquals(target, HitChance.High, false);
                 }
                 else if (comboTypeIndex < 2 && GetBool("comboQ") && Q.IsReady() && Q.IsInRange(target))
                 {
-                    Q.Cast(target.Position);
+                    Q.CastIfHitchanceEquals(target, HitChance.High, false);
                 }
             }
             else if (OrbwalkerMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (GetBool("harassQ") && Q.IsReady() && manaManager() && Q.IsInRange(target))
                 {
-                    Q.Cast(target.Position);
+                    Q.CastIfHitchanceEquals(target, HitChance.High, false);
                 }
             }
             else if (OrbwalkerMode == Orbwalking.OrbwalkingMode.LaneClear)
