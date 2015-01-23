@@ -251,23 +251,24 @@ namespace MAC.Plugin
         public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var comboTypeIndex = Menu.Item("comboType").GetValue<StringList>().SelectedIndex;
+            var t = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Physical);
 
             if (OrbwalkerMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (comboTypeIndex == 2 && Q.IsReady() && Q.IsInRange(target))
                 {
-                    Q.CastIfHitchanceEquals(target, HitChance.High, false);
+                    Q.CastIfHitchanceEquals(t, HitChance.High, false);
                 }
                 else if (comboTypeIndex < 2 && GetBool("comboQ") && Q.IsReady() && Q.IsInRange(target))
                 {
-                    Q.CastIfHitchanceEquals(target, HitChance.High, false);
+                    Q.CastIfHitchanceEquals(t, HitChance.High, false);
                 }
             }
             else if (OrbwalkerMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (GetBool("harassQ") && Q.IsReady() && manaManager() && Q.IsInRange(target))
                 {
-                    Q.CastIfHitchanceEquals(target, HitChance.High, false);
+                    Q.CastIfHitchanceEquals(t, HitChance.High,false);
                 }
             }
             else if (OrbwalkerMode == Orbwalking.OrbwalkingMode.LaneClear)
