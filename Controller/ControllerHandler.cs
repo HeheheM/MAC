@@ -1,4 +1,4 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using MAC.Util;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace MAC.Controller
         {
             Events.Game.OnGameStart += OnGameStart;
             Game.PrintChat(MiscControl.stringColor("MAC , " + GameControl.version, MiscControl.TableColor.Gold));
-            Game.PrintChat("Para mais assemblies como esse acesse www.lol-pro.net");
+            Game.PrintChat("Currently being developed by HeheheM");
         }
 
         /*
