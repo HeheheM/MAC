@@ -1,4 +1,4 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
 using MAC.Model;
 using System;
@@ -27,15 +27,20 @@ namespace MAC.Controller
 
             _menu = config;
 
-            Game.OnGameUpdate += GameOnOnGameUpdate;
+            Game.OnUpdate += GameOnOnGameUpdate;
         }
 
         private static void GameOnOnGameUpdate(EventArgs args)
         {
             var useHp = _menu.Item("useHP").GetValue<bool>();
             var useMp = _menu.Item("useMP").GetValue<bool>();
-
-            if (useHp && ObjectManager.Player.HealthPercentage() <= _menu.Item("useHPPercent").GetValue<Slider>().Value &&
+            
+            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain() || ObjectManager.Player.InShop())
+            {
+                return;
+            }
+            
+            if (useHp && ObjectManager.Player.HealthPercent <= _menu.Item("useHPPercent").GetValue<Slider>().Value &&
                 !HasHealthPotBuff())
             {
                 if (Items.CanUseItem(Hpid) && Items.HasItem(Hpid))
