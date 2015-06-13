@@ -1,4 +1,4 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
 using MAC.Model;
 using System;
