@@ -1,4 +1,4 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
 using System;
 using System.Collections.Generic;
@@ -16,27 +16,26 @@ namespace MAC.Util
         public static void LoadPlugin()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-            var plugin = Type.GetType("MAC.Plugin." + ObjectManager.Player.ChampionName);
-
-            if (plugin == null)
-            {
-                Game.PrintChat(MiscControl.stringColor(ObjectManager.Player.ChampionName, MiscControl.TableColor.Red) + " not found. Loading OrbWalker");
-                MiscControl.LoadOrbwalker();
-                return;
-            }
+            var champname = ObjectManager.Player.BaseSkinName;
+            if (champname == "Vayne")
+                new MAC.Plugin.Vayne();
+            else if (champname == "Graves")
+                new MAC.Plugin.Graves();
+            else if (champname == "Jinx")
+                new MAC.Plugin.Jinx();
             else
             {
-                Game.PrintChat(MiscControl.stringColor(ObjectManager.Player.ChampionName, MiscControl.TableColor.RoyalBlue) + " loaded, thanks for using MAC.");
+                Game.PrintChat(MiscControl.stringColor(ObjectManager.Player.ChampionName, MiscControl.TableColor.Red) + " not found. Loading OrbWalker...");
+                MiscControl.LoadOrbwalker();
             }
-
-            Activator.CreateInstance(plugin);
-        }
 
         private static void CurrentDomainOnUnhandledException(object sender,
             UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
             Console.WriteLine(((Exception)unhandledExceptionEventArgs.ExceptionObject).Message);
-            Game.PrintChat("Fatal Error please report on forum / Erro critico por favor avise no fórum");
+            Console.WriteLine(((Exception)unhandledExceptionEventArgs.ExceptionObject).Source);
+            Console.WriteLine((string)unhandledExceptionEventArgs.ExceptionObject);
+            Game.PrintChat("Fatal error occured!");
         }
 
         public class EnemyInfo
